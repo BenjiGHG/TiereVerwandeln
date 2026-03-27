@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Morph Addon RP",
+    "description": "Textures and UI for Morph Addon.",
+    "uuid": "13a941dd-b05b-4d03-a49a-fea7d4629648",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "651539f0-be31-4a7c-a891-a43891383bf2",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}

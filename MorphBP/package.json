@@ -1,0 +1,9 @@
+{
+  "name": "morph-addon-bp",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@minecraft/server": "2.0.0",
+    "@minecraft/server-ui": "2.0.0"
+  }
+}
