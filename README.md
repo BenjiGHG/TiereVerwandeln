@@ -42,6 +42,14 @@ Ausgabe:
 - `build/MorphRP.mcpack`
 - `build/MorphAddon_v1.0.0.mcaddon`
 
+## Dein Bild als Mod-Profilbild (Pack-Icon)
+
+1. Speichere dein Bild als `custom/pack_icon.png`.
+2. Starte den Build (`build_mcaddon.bat` oder `python build_mcaddon.py`).
+3. Das Bild wird automatisch als `pack_icon.png` in **beide** Packs eingebaut.
+
+> Empfohlen: PNG in 256x256 Pixel.
+
 ## Import in Minecraft
 
 1. `build/MorphAddon_v1.0.0.mcaddon` doppelklicken

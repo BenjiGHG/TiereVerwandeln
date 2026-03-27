@@ -14,13 +14,16 @@ RP_DIR = ROOT / "MorphRP"
 BP_PACK = BUILD / "MorphBP.mcpack"
 RP_PACK = BUILD / "MorphRP.mcpack"
 ADDON = BUILD / "MorphAddon_v1.0.0.mcaddon"
+CUSTOM_ICON = ROOT / "custom" / "pack_icon.png"
 
 
-def zip_dir(source_dir: Path, target_zip: Path) -> None:
+def zip_dir(source_dir: Path, target_zip: Path, custom_icon: Path | None = None) -> None:
     with ZipFile(target_zip, "w", compression=ZIP_DEFLATED) as zf:
         for file in source_dir.rglob("*"):
             if file.is_file():
                 zf.write(file, arcname=file.relative_to(source_dir))
+        if custom_icon and custom_icon.exists():
+            zf.write(custom_icon, arcname="pack_icon.png")
 
 
 def main() -> None:
@@ -29,8 +32,12 @@ def main() -> None:
         if f.exists():
             f.unlink()
 
-    zip_dir(BP_DIR, BP_PACK)
-    zip_dir(RP_DIR, RP_PACK)
+    icon = CUSTOM_ICON if CUSTOM_ICON.exists() else None
+    if icon:
+        print(f"Using custom pack icon: {icon}")
+
+    zip_dir(BP_DIR, BP_PACK, icon)
+    zip_dir(RP_DIR, RP_PACK, icon)
 
     with ZipFile(ADDON, "w", compression=ZIP_DEFLATED) as zf:
         zf.write(BP_PACK, arcname=BP_PACK.name)

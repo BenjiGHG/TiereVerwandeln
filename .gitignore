@@ -1,3 +1,5 @@
 build/*.mcpack
 build/*.mcaddon
 build/.mcaddon_tmp/
+
+custom/pack_icon.png
