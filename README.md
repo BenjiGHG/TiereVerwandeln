@@ -16,6 +16,22 @@ Dieses Repo erzeugt eine importierbare `mcaddon`-Datei mit:
 
 ## Bauen
 
+### Windows (ohne pip, ohne PowerShell-Skripte)
+
+Einfach `build_mcaddon.bat` doppelklicken **oder** in `cmd` ausführen:
+
+```cmd
+build_mcaddon.bat
+```
+
+### Alle Systeme mit Python 3 (ohne pip)
+
+```bash
+python build_mcaddon.py
+```
+
+### Linux/macOS (Bash-Variante)
+
 ```bash
 bash build_mcaddon.sh
 ```
@@ -33,5 +49,5 @@ Ausgabe:
 3. In den Welteinstellungen **Beta APIs / Script API** aktivieren (je nach Version benannt)
 ## Hinweis zu Binärdateien
 
-Dieses Repository speichert **keine** `.mcpack`/`.mcaddon`-Dateien im Git-Verlauf, damit Plattformen ohne Binär-Support problemlos arbeiten können. Erzeuge die Pakete lokal mit `bash build_mcaddon.sh`.
+Dieses Repository speichert **keine** `.mcpack`/`.mcaddon`-Dateien im Git-Verlauf, damit Plattformen ohne Binär-Support problemlos arbeiten können. Erzeuge die Pakete lokal mit `build_mcaddon.bat` (Windows) oder `python build_mcaddon.py` (ohne pip).
 
