@@ -50,6 +50,14 @@ Ausgabe:
 
 > Empfohlen: PNG in 256x256 Pixel.
 
+
+## Steuerung (falls Taste nicht geht)
+
+Wenn Taste/Item-Use auf deinem Gerät nicht sauber erkannt wird, hast du jetzt 2 sichere Fallbacks:
+
+1. Chatbefehl: `!morph`
+2. Script Event: `/scriptevent morph:open`
+
 ## Import in Minecraft
 
 1. `build/MorphAddon_v1.0.0.mcaddon` doppelklicken

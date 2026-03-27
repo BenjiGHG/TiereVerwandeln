@@ -3,6 +3,7 @@ import { ActionFormData } from "@minecraft/server-ui";
 
 const PROPERTY_UNLOCKS = "morph:unlocked";
 const PROPERTY_CURRENT = "morph:current";
+const PROPERTY_HINTED = "morph:hinted";
 const MENU_ITEM_ID = "morph:menu_orb";
 const MAX_STRING = 32767;
 
@@ -26,6 +27,7 @@ world.beforeEvents.worldInitialize.subscribe((ev) => {
   const def = new DynamicPropertiesDefinition();
   def.defineString(PROPERTY_UNLOCKS, MAX_STRING);
   def.defineString(PROPERTY_CURRENT, 64);
+  def.defineString(PROPERTY_HINTED, 8);
   ev.propertyRegistry.registerEntityTypeDynamicProperties(def, "minecraft:player");
 });
 
@@ -77,10 +79,20 @@ function applyMorph(player, entityTypeId) {
   }
 }
 
+
+function tryOpenMorphMenu(player) {
+  system.run(async () => {
+    try {
+      await openMorphMenu(player);
+    } catch (err) {
+      player.sendMessage("§cMorph-Menü konnte nicht geöffnet werden.");
+      player.sendMessage("§7Nutze alternativ: !morph oder /scriptevent morph:open");
+    }
+  });
+}
+
 async function openMorphMenu(player) {
   const unlocked = parseUnlocks(player);
-  const options = ["Zurück zum Spieler", ...unlocked.map((u) => u.replace("minecraft:", ""))];
-
   const form = new ActionFormData()
     .title("Morph-Menü")
     .body("Wähle einen freigeschalteten Mob")
@@ -107,7 +119,13 @@ async function openMorphMenu(player) {
 
 world.afterEvents.playerSpawn.subscribe((ev) => {
   if (!ev.initialSpawn) return;
-  system.runTimeout(() => ensureMenuItem(ev.player), 20);
+  system.runTimeout(() => {
+    ensureMenuItem(ev.player);
+    if (!ev.player.getDynamicProperty(PROPERTY_HINTED)) {
+      ev.player.sendMessage("§bMorph: Rechtsklick auf das Orb-Item oder schreibe !morph");
+      ev.player.setDynamicProperty(PROPERTY_HINTED, "1");
+    }
+  }, 20);
 });
 
 world.afterEvents.entityDie.subscribe((ev) => {
@@ -128,8 +146,32 @@ world.afterEvents.entityDie.subscribe((ev) => {
 
 world.afterEvents.itemUse.subscribe((ev) => {
   if (ev.itemStack?.typeId !== MENU_ITEM_ID) return;
-  openMorphMenu(ev.source);
+  tryOpenMorphMenu(ev.source);
 });
+
+if (world.afterEvents.itemStartUse) {
+  world.afterEvents.itemStartUse.subscribe((ev) => {
+    if (ev.itemStack?.typeId !== MENU_ITEM_ID) return;
+    tryOpenMorphMenu(ev.source);
+  });
+}
+
+if (world.beforeEvents.chatSend) {
+  world.beforeEvents.chatSend.subscribe((ev) => {
+    if (ev.message.trim().toLowerCase() !== "!morph") return;
+    ev.cancel = true;
+    tryOpenMorphMenu(ev.sender);
+  });
+}
+
+if (system.afterEvents.scriptEventReceive) {
+  system.afterEvents.scriptEventReceive.subscribe((ev) => {
+    if (ev.id !== "morph:open") return;
+    const source = ev.sourceEntity;
+    if (!source || source.typeId !== "minecraft:player") return;
+    tryOpenMorphMenu(source);
+  });
+}
 
 system.runInterval(() => {
   for (const player of world.getPlayers()) {
